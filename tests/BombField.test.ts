@@ -47,8 +47,6 @@ describe("Генератор минного поля", ()=>{
         expect(field.getBombs().length).toBe(amount);
     })
 
-    // TODO: Тест на то, что все мины лежат в указанном диапазоне 
-
     it("мины должны быть в указанном диапазоне", ()=>{
         const amount = 5;
         const width = 100, height = 50;
@@ -57,8 +55,6 @@ describe("Генератор минного поля", ()=>{
         expect(field.getBombs().every(b => b[1] >= 0 && b[1] < height)).toBeTruthy(); 
     })
 
-
-    // TODO: Тест на то, сгенерировав поле дважды, мы получаем разный результат 
     it("сгенерировав поле дважды, мы получаем разный результат", ()=>{
         const amount = 50;
         const field1 = BombField.generate(amount, 100, 100);
@@ -66,6 +62,10 @@ describe("Генератор минного поля", ()=>{
 
         expect(field1).not.toEqual(field2);
     })
+
+})
+
+describe("Методы минного поля", ()=>{
 
     it("метод проверки возвращает true если передать координаты существующей бомбы" , ()=>{
         const field = new BombField();
@@ -93,5 +93,56 @@ describe("Генератор минного поля", ()=>{
         expect(field.exists(nonExistingBomb)).toBeFalsy();
     })
 
-})
+    it("метод вычисления соседей возвращает 0 если рядом нет ни одной мины", () => {
+        
+        const field = new BombField();
 
+        const bomb1: [number, number] = [10, 10];
+        const bomb2: [number, number] = [10, 9];
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+
+        expect(field.calculateNeighbours([1,1])).toBe(0);        
+    })
+
+    it("метод вычисления соседей возвращает 8 если клетка окружена минами", () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [0, 0];
+        const bomb2: [number, number] = [0, 1];
+        const bomb3: [number, number] = [0, 2];
+        const bomb4: [number, number] = [1, 0];
+        const bomb5: [number, number] = [1, 2];
+        const bomb6: [number, number] = [2, 0];
+        const bomb7: [number, number] = [2, 1];
+        const bomb8: [number, number] = [2, 2];
+
+        /* 
+           * * *
+           * ? *   -> 8
+           * * *
+        */
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        field.getBombs().push(bomb3);
+        field.getBombs().push(bomb4);
+        field.getBombs().push(bomb5);
+        field.getBombs().push(bomb6);
+        field.getBombs().push(bomb7);
+        field.getBombs().push(bomb8);
+
+        expect(field.calculateNeighbours([1,1])).toBe(8);        
+    })
+
+    // Ещё пара случаев (соседи по диагонали, соседи слева/справа/сверху/снизу)
+
+    // Тесты на сценарии, когда проверяем у края (как минимум у левого и верхнего, можно и право/низ)
+        /* 
+           * . .
+           ? . .   -> 3
+           * * .
+        */
+
+})

@@ -41,4 +41,8 @@ export class BombField {
         return this.bombs.some(b => b[0] == coordinates[0] && b[1] == coordinates[1]);
     }
 
+    calculateNeighbours(coordinates: [number, number]): number {
+        throw new Error("Not implemented yet");
+    }
+
 }
