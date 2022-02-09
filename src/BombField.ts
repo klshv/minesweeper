@@ -42,6 +42,7 @@ export class BombField {
     }
 
     calculateNeighbours(coordinates: [number, number]): number {
+
         throw new Error("Not implemented yet");
     }
 

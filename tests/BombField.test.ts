@@ -124,6 +124,7 @@ describe("Методы минного поля", ()=>{
            * ? *   -> 8
            * * *
         */
+
         field.getBombs().push(bomb1);
         field.getBombs().push(bomb2);
         field.getBombs().push(bomb3);
@@ -138,11 +139,112 @@ describe("Методы минного поля", ()=>{
 
     // Ещё пара случаев (соседи по диагонали, соседи слева/справа/сверху/снизу)
 
-    // Тесты на сценарии, когда проверяем у края (как минимум у левого и верхнего, можно и право/низ)
+    it("метод вычисления соседей возвращает 4 если во всех диагональных направлениях есть мины", () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [0, 0];
+        const bomb2: [number, number] = [0, 2];
+        const bomb3: [number, number] = [2, 0];
+        const bomb4: [number, number] = [2, 2];
+
         /* 
-           * . .
-           ? . .   -> 3
-           * * .
+           * - *
+           - ? -   -> 4
+           * - *
         */
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        field.getBombs().push(bomb3);
+        field.getBombs().push(bomb4);
+        
+        expect(field.calculateNeighbours([1,1])).toBe(4);        
+    })
+
+    it("метод вычисления соседей возвращает 3 если справа во всех клетках бомбы", () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [2, 0];
+        const bomb2: [number, number] = [2, 1];
+        const bomb3: [number, number] = [2, 2];
+
+        /* 
+           - - *
+           - ? *   -> 3
+           - - *
+        */
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        field.getBombs().push(bomb3);
+        
+        expect(field.calculateNeighbours([1,1])).toBe(3);        
+    })
+
+    it("метод вычисления соседей возвращает 3 если снизу во всех клетках бомбы", () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [0, 0];
+        const bomb2: [number, number] = [1, 0];
+        const bomb3: [number, number] = [2, 0];
+
+        /* 
+           - - -
+           - ? -   -> 3
+           * * *
+        */
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        field.getBombs().push(bomb3);
+        
+        expect(field.calculateNeighbours([1,1])).toBe(3);        
+    })
+
+    // Тесты на сценарии, когда проверяем у края (как минимум у левого и верхнего, можно и право/низ)
+        
+
+    it("метод вычисления соседей возвращает 3 если вокруг клетки 3 мины (левый край и еще одна)", () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [1, 3];
+        const bomb2: [number, number] = [1, 1];
+        const bomb3: [number, number] = [2, 1];
+        
+        /* 
+           * - -
+           ? - -   -> 3
+           * * -
+        */ 
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        field.getBombs().push(bomb3);
+        
+        expect(field.calculateNeighbours([1,2])).toBe(3);        
+    })
+
+    it("метод вычисления соседей возвращает 2 если вокруг клетки 2 мины (нижний край)" , () => {
+        
+        const field = new BombField();
+
+        const bomb1: [number, number] = [0, 0];
+        const bomb2: [number, number] = [2, 0];
+        
+        /* 
+           - - -
+           - - -   -> 2
+           * ? *
+        */ 
+
+        field.getBombs().push(bomb1);
+        field.getBombs().push(bomb2);
+        
+        expect(field.calculateNeighbours([1,0])).toBe(2);        
+    })
 
 })
