@@ -1,5 +1,7 @@
 export class BombField {
 
+    private bombs: [number, number][] = [];
+
     constructor() {
 
     }
@@ -32,9 +34,6 @@ export class BombField {
        return result;
     }
 
-    // private bombs: number[] = [];
-    private bombs: [number, number][] = [];
-
     getBombs = () => this.bombs;
 
     exists(coordinates: [number, number]): boolean {
@@ -42,8 +41,18 @@ export class BombField {
     }
 
     calculateNeighbours(coordinates: [number, number]): number {
-
-        throw new Error("Not implemented yet");
+        const neighbours: [number, number][] = [];
+        for (let i=-1;i<=1;i++) {
+            for (let j=-1;j<=1;j++) {
+                if (i == 0 && j == 0) continue;
+                const x = coordinates[0] + i;
+                const y = coordinates[1] + j;
+                if (x >= 0 && y >= 0) {
+                    neighbours.push([x, y]);
+                }
+            }
+        }
+        return neighbours.filter(x => this.exists(x)).length;
     }
 
 }
