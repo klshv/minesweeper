@@ -1,7 +1,7 @@
 import { BombField } from "./BombField";
 
 export enum GameMapCell {
-   Closed = -1, Flagged, Opened0, Opened1, Opened2, Opened3, Opened4, Opened5, Opened6, Opened7, Opened8, Boom
+   Closed = -3, Flagged, Boom, Opened0, Opened1, Opened2, Opened3, Opened4, Opened5, Opened6, Opened7, Opened8
 }
 
 export enum FlagResult { FlagAdded = -1, NoChanges = 0, FlagRemoved = 1 }
@@ -21,13 +21,15 @@ export class GameMap {
     }
 
     setFlag(x: number, y: number): FlagResult {
-        if (this.cells[y][x] == GameMapCell.Closed) {
-            this.cells[y][x] = GameMapCell.Flagged;
-            return FlagResult.FlagAdded;
-        } else { 
-            return FlagResult.NoChanges;
+        switch(this.cells[y][x]) {
+            case GameMapCell.Closed: 
+                this.cells[y][x] = GameMapCell.Flagged;
+                return FlagResult.FlagAdded;
+            case GameMapCell.Flagged: 
+                return this.removeFlag(x, y);
+            default:
+                return FlagResult.NoChanges;
         }
-
     }
 
     removeFlag(x: number, y: number): FlagResult {
